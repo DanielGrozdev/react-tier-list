@@ -19,6 +19,7 @@ type Draggable = {
 type DropZone = {
   id: string;
   draggables: string[];
+  backgroundColor?: string;
 };
 
 const defaultDraggables: Draggable[] = [
@@ -48,22 +49,27 @@ const defaultDropZones: DropZone[] = [
   {
     id: "S",
     draggables: [],
+    backgroundColor: "#ff7f7f",
   },
   {
     id: "A",
     draggables: [],
+    backgroundColor: "#ffbf7f",
   },
   {
     id: "B",
     draggables: [],
+    backgroundColor: "#ffe77f",
   },
   {
     id: "C",
     draggables: [],
+    backgroundColor: "#bfff7f",
   },
   {
     id: "D",
     draggables: [],
+    backgroundColor: "#7fffbf",
   },
   {
     id: "free",
@@ -199,9 +205,10 @@ export default function App() {
 
   const freeDropZone = dropZones.find((dz) => dz.id === "free");
   if (!freeDropZone) return null;
+
   return (
     <>
-      <div className="flex flex-col w-screeen h-screen justify-center item-center gap-16">
+      <div className="flex flex-col w-screeen min-h-screen justify-center item-center gap-16">
         <DndContext
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
@@ -231,10 +238,9 @@ export default function App() {
 }
 
 function DropZone({ dropZone }: { dropZone: DropZone }) {
-  const { id, draggables } = dropZone;
+  const { id, draggables, backgroundColor } = dropZone;
 
   const { setNodeRef } = useDroppable({ id: id });
-  const backgroundColor = dropZoneColorMap[id] as keyof typeof dropZoneColorMap;
 
   return (
     <div
@@ -315,14 +321,6 @@ function Draggable({ draggable }: { draggable: Draggable }) {
 
   return (
     <>
-      <div
-        id={id}
-        role="tooltip"
-        className="absolute z-10 bg-amber-500 text-white invisible"
-      >
-        Tooltip content
-        <div className="tooltip-arrow" data-popper-arrow></div>
-      </div>
       <button
         data-tooltip-target={id}
         className="cursor-pointer min-w-auto w-[200px]"
@@ -357,10 +355,3 @@ function DraggableContent({
     </div>
   );
 }
-const dropZoneColorMap = {
-  S: "#ff7f7f", // rgb(255, 127, 127)
-  A: "#ffbf7f", // rgb(255, 191, 127)
-  B: "#ffe77f", // rgb(255, 231, 127)
-  C: "#bfff7f", // rgb(191, 255, 127)
-  D: "#7fffbf", // rgb(127, 255, 191)
-};
